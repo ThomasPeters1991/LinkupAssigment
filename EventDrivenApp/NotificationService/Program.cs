@@ -19,7 +19,7 @@ builder.Services.AddSingleton<RabbitMQService>(sp =>
     return new RabbitMQService(options.HostName, options.UserName, options.Password, logger);
 });
 builder.Services.AddSingleton<OrdersListener>();
-builder.Services.AddSingleton<publisher>();
+builder.Services.AddSingleton<Publisher>();
 
 var app = builder.Build();
 

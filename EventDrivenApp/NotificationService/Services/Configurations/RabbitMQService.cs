@@ -9,9 +9,12 @@ namespace NotificationService.Services.Configurations
         private readonly string _hostName;
         private readonly string _userName;
         private readonly string _password;
+        private readonly ILogger<RabbitMQService> _logger;
         private IConnection _connection;
         private IModel _channel;
-        private readonly ILogger<RabbitMQService> _logger;
+
+        private const int MaxRetries = 5;
+        private static readonly TimeSpan RetryDelay = TimeSpan.FromSeconds(10);
 
         public RabbitMQService(string hostName, string userName, string password, ILogger<RabbitMQService> logger)
         {
@@ -32,47 +35,57 @@ namespace NotificationService.Services.Configurations
                 Password = _password
             };
 
-            var retryCount = 0;
-            var maxRetries = 5;
-            var retryDelay = TimeSpan.FromSeconds(10);
-
-            while (retryCount < maxRetries)
+            for (int retryCount = 0; retryCount < MaxRetries; retryCount++)
             {
                 try
                 {
                     _connection = factory.CreateConnection();
                     _channel = _connection.CreateModel();
-                    _logger.LogInformation("Connected to RabbitMQ");
-
-
-                    break;
+                    _logger.LogInformation("Connected to RabbitMQ.");
+                    return;
                 }
                 catch (BrokerUnreachableException ex)
                 {
-                    retryCount++;
-                    _logger.LogWarning(ex, "Could not connect to RabbitMQ. Retrying in {RetryDelay} seconds... ({RetryCount}/{MaxRetries})", retryDelay.TotalSeconds, retryCount, maxRetries);
-                    Thread.Sleep(retryDelay);
+                    _logger.LogWarning(ex, "Could not connect to RabbitMQ. Retrying in {RetryDelay} seconds... ({RetryCount}/{MaxRetries})", RetryDelay.TotalSeconds, retryCount + 1, MaxRetries);
                 }
                 catch (Exception ex)
                 {
-                    _logger.LogError(ex, "An error occurred while initializing RabbitMQ");
+                    _logger.LogError(ex, "An error occurred while initializing RabbitMQ.");
                     throw;
                 }
+
+                Thread.Sleep(RetryDelay);
             }
 
-            if (_connection == null || _channel == null)
+            _logger.LogError("Failed to connect to RabbitMQ after {MaxRetries} retries.", MaxRetries);
+            throw new Exception("Failed to connect to RabbitMQ");
+        }
+
+        public IModel Channel
+        {
+            get
             {
-                _logger.LogError("Failed to connect to RabbitMQ after {MaxRetries} retries", maxRetries);
-                throw new Exception("Failed to connect to RabbitMQ");
+                if (_channel == null)
+                {
+                    throw new InvalidOperationException("RabbitMQ channel is not initialized.");
+                }
+                return _channel;
             }
         }
 
-        public IModel Channel => _channel;
-
         public void Dispose()
         {
-            _channel?.Dispose();
-            _connection?.Dispose();
+            try
+            {
+                _channel?.Close();
+                _channel?.Dispose();
+                _connection?.Close();
+                _connection?.Dispose();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while disposing RabbitMQ resources.");
+            }
         }
     }
 }
