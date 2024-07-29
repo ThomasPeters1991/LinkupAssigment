@@ -39,6 +39,32 @@ namespace UserService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "tpeters@ttlabs.co.za",
+                            Name = "Thomas Peters"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "jpiet@gmail.com",
+                            Name = "Piet"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "Joe@gmail.com",
+                            Name = "Joe"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "Caleb@gmail.com",
+                            Name = "Caleb"
+                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace UserService.Migrations
 {
     [DbContext(typeof(UserContext))]
-    [Migration("20240729115322_Users_Init")]
-    partial class Users_Init
+    [Migration("20240729205146_UserService_Init")]
+    partial class UserService_Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,6 +42,32 @@ namespace UserService.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "tpeters@ttlabs.co.za",
+                            Name = "Thomas Peters"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "jpiet@gmail.com",
+                            Name = "Piet"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "Joe@gmail.com",
+                            Name = "Joe"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "Caleb@gmail.com",
+                            Name = "Caleb"
+                        });
                 });
 #pragma warning restore 612, 618
         }

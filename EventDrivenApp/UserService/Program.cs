@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using UserService.Services;
 using UserService.Services.Configurations;
 using UserService.Services.Listeners;
 
@@ -11,35 +12,19 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
-
-
-
-builder.Services.AddSingleton<IUserRepository, UserRepository>();
+builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
 
 builder.Services.AddDbContext<UserContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddHostedService<RabbitMQConsumerService>();
 
-builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQ"));
-builder.Services.AddSingleton<RabbitMQService>(sp =>
-{
-    var options = sp.GetRequiredService<IOptions<RabbitMQSettings>>().Value;
-    var logger = sp.GetRequiredService<ILogger<RabbitMQService>>();
-    return new RabbitMQService(options.HostName, options.UserName, options.Password, logger);
-});
-builder.Services.AddSingleton<UserInfoListener>();
-
-// Add DbContext and other services
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 
 var app = builder.Build();
 Thread.Sleep(15000);
-// Start the UserServiceListener after application starts
-var rabbitMqService = app.Services.GetRequiredService<RabbitMQService>();
-var userServiceListener = app.Services.GetRequiredService<UserInfoListener>();
-userServiceListener.Start();
-
 
 var dbContext = app.Services.CreateScope().ServiceProvider.GetRequiredService<UserContext>();
 dbContext.Database.Migrate();

@@ -3,10 +3,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace UserService.Migrations
 {
     /// <inheritdoc />
-    public partial class Users_Init : Migration
+    public partial class UserService_Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +25,17 @@ namespace UserService.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "Name" },
+                values: new object[,]
+                {
+                    { 1, "tpeters@ttlabs.co.za", "Thomas Peters" },
+                    { 2, "jpiet@gmail.com", "Piet" },
+                    { 3, "Joe@gmail.com", "Joe" },
+                    { 4, "Caleb@gmail.com", "Caleb" }
                 });
         }
 
