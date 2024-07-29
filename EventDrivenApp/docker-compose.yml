@@ -4,8 +4,8 @@ services:
   userservice:
     image: userservice
     build:
-      context: ../UserService
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: NotificationService/Dockerfile
     ports:
       - "5001:80"
     environment:
@@ -15,8 +15,8 @@ services:
   orderservice:
     image: orderservice
     build:
-      context: ../OrderService
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: OrderService/Dockerfile
     ports:
       - "5002:80"
     environment:
@@ -26,8 +26,8 @@ services:
   notificationservice:
     image: notificationservice
     build:
-      context: ../NotificationService
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: NotificationService/Dockerfile
     ports:
       - "5003:80"
     environment:

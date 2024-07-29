@@ -3,16 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserService", "UserService\UserService.csproj", "{DF5A8C13-FE05-46AF-A62A-C5A3AA8FDF77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserService", "UserService\UserService.csproj", "{DF5A8C13-FE05-46AF-A62A-C5A3AA8FDF77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderService", "OrderService\OrderService.csproj", "{99950594-8195-44CC-B9F2-A7EBB9B68FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderService", "OrderService\OrderService.csproj", "{99950594-8195-44CC-B9F2-A7EBB9B68FC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "NotificationService\NotificationService.csproj", "{35871136-87CB-4C4F-AA46-8BFD2A645B65}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "NotificationService\NotificationService.csproj", "{35871136-87CB-4C4F-AA46-8BFD2A645B65}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7337E563-653F-4B8E-9685-B2D24CF0265B}"
-	ProjectSection(SolutionItems) = preProject
-		docker-compose\docker-compose.yml = docker-compose\docker-compose.yml
-	EndProjectSection
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2D18BA12-A1F2-413D-A464-5A9F0FD0F195}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,6 +29,10 @@ Global
 		{35871136-87CB-4C4F-AA46-8BFD2A645B65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35871136-87CB-4C4F-AA46-8BFD2A645B65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35871136-87CB-4C4F-AA46-8BFD2A645B65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2D18BA12-A1F2-413D-A464-5A9F0FD0F195}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2D18BA12-A1F2-413D-A464-5A9F0FD0F195}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2D18BA12-A1F2-413D-A464-5A9F0FD0F195}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2D18BA12-A1F2-413D-A464-5A9F0FD0F195}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
