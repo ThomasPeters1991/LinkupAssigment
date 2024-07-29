@@ -1,19 +1,43 @@
 version: '3.4'
 
 services:
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: LinkupDB
+    ports:
+      - '5432:5432'
+    networks:
+      - eventdrivenapp-network   
+    volumes:
+      - 'linkupdata:/var/lib/postgresql/data'
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: dev
+      RABBITMQ_DEFAULT_PASS: password
+    networks:
+      - eventdrivenapp-network
+
   userservice:
-    image: userservice
     build:
       context: .
-      dockerfile: NotificationService/Dockerfile
+      dockerfile: UserService/Dockerfile
     ports:
       - "5001:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Database=UserDb;Username=yourusername;Password=yourpassword
+      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Database=LinkupDB;Username=dev;Password=password
+    networks:
+      - eventdrivenapp-network
 
   orderservice:
-    image: orderservice
     build:
       context: .
       dockerfile: OrderService/Dockerfile
@@ -21,10 +45,15 @@ services:
       - "5002:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Database=OrderDb;Username=yourusername;Password=yourpassword
+      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Database=LinkupDB;Username=dev;Password=password
+      - RabbitMQ__HostName=rabbitmq
+      - RabbitMQ__UserName=dev
+      - RabbitMQ__Password=password
+      - RabbitMQ__QueueName=order_created_queue
+    networks:
+      - eventdrivenapp-network
 
   notificationservice:
-    image: notificationservice
     build:
       context: .
       dockerfile: NotificationService/Dockerfile
@@ -32,3 +61,22 @@ services:
       - "5003:80"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - eventdrivenapp-network
+
+  mqmanager:
+    build:
+      context: .
+      dockerfile: MQManager/Dockerfile
+    ports:
+      - "5004:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - eventdrivenapp-network
+volumes:
+  linkupdata:
+
+networks:
+  eventdrivenapp-network:
+    driver: bridge
