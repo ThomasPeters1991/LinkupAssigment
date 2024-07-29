@@ -9,11 +9,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Add DbContext and other services
-builder.Services.AddDbContext<UserContext>(options =>
+builder.Services.AddDbContext<OrderContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,11 +22,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "UserService API V1");
+        c.SwaggerEndpoint("/swagger/v1/swagger.json", "OrdersService API V1");
         c.RoutePrefix = string.Empty; // To serve the Swagger UI at the app's root
     });
 
 }
+
 
 app.UseAuthorization();
 

@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["UserService/UserService.csproj", "UserService/"]
-RUN dotnet restore "UserService/UserService.csproj"
+COPY ["Linkup/EventDrivenApp/UserService/UserService.csproj", "Linkup/EventDrivenApp/UserService/"]
+RUN dotnet restore "Linkup/EventDrivenApp/UserService/UserService.csproj"
 COPY . .
-WORKDIR "/src/UserService"
+WORKDIR "/src/Linkup/EventDrivenApp/UserService"
 RUN dotnet build "UserService.csproj" -c Release -o /app/build
 
 FROM build AS publish

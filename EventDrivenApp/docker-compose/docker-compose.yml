@@ -1,0 +1,34 @@
+version: '3.4'
+
+services:
+  userservice:
+    image: userservice
+    build:
+      context: ../UserService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Database=UserDb;Username=yourusername;Password=yourpassword
+
+  orderservice:
+    image: orderservice
+    build:
+      context: ../OrderService
+      dockerfile: Dockerfile
+    ports:
+      - "5002:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=host.docker.internal;Database=OrderDb;Username=yourusername;Password=yourpassword
+
+  notificationservice:
+    image: notificationservice
+    build:
+      context: ../NotificationService
+      dockerfile: Dockerfile
+    ports:
+      - "5003:80"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development

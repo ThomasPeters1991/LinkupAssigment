@@ -6,16 +6,16 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["UserService/UserService.csproj", "UserService/"]
-RUN dotnet restore "UserService/UserService.csproj"
+COPY ["NotificationService/NotificationService.csproj", "NotificationService/"]
+RUN dotnet restore "NotificationService/NotificationService.csproj"
 COPY . .
-WORKDIR "/src/UserService"
-RUN dotnet build "UserService.csproj" -c Release -o /app/build
+WORKDIR "/src/NotificationService"
+RUN dotnet build "NotificationService.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "UserService.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "NotificationService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "UserService.dll"]
+ENTRYPOINT ["dotnet", "NotificationService.dll"]
