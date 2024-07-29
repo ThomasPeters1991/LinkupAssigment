@@ -40,8 +40,8 @@ This project demonstrates a microservices architecture with the following servic
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/distributed-microservices.git
-   cd distributed-microservices
+   git clone https://github.com/yourusername/LinkupAssigment.git
+   cd EventDrivenApp
    ```
 
 2. Restore dependencies for all services:
