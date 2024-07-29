@@ -1,6 +1,5 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
-using RabbitMQ.Client.Events;
 
 namespace NotificationService.Services.Configurations
 {
@@ -46,7 +45,7 @@ namespace NotificationService.Services.Configurations
                 }
                 catch (BrokerUnreachableException ex)
                 {
-                    _logger.LogWarning(ex, "Could not connect to RabbitMQ. Retrying in {RetryDelay} seconds... ({RetryCount}/{MaxRetries})", RetryDelay.TotalSeconds, retryCount + 1, MaxRetries);
+                    _logger.LogWarning(ex, "Could not connect to RabbitMQ. Attempt:({RetryCount}/{MaxRetries})", retryCount + 1, MaxRetries);
                 }
                 catch (Exception ex)
                 {
