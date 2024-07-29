@@ -5,7 +5,7 @@ namespace MQManager.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QueuesController: ControllerBase
+    public class QueuesController : ControllerBase
     {
         private readonly RabbitMQSetupService _rabbitMQSetupService;
 
@@ -15,11 +15,19 @@ namespace MQManager.Controllers
         }
 
         [HttpPost]
-        [Route("CreateQueues")]
-        public IActionResult CreateQueues()
+        [Route("CreatePredefinedQueues")]
+        public IActionResult CreatePredefinedQueues()
         {
             _rabbitMQSetupService.CreateQueues();
-            return Ok("Queues created successfully.");
+            return Ok("Predefined queues created successfully.");
+        }
+
+        [HttpDelete]
+        [Route("ClearAllQueues")]
+        public IActionResult ClearAllQueues()
+        {
+            _rabbitMQSetupService.ClearQueues();
+            return Ok("All queues cleared successfully.");
         }
     }
 }

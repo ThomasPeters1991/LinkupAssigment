@@ -7,6 +7,5 @@
         public string Password { get; set; }
         public string OrdersQueueName { get; set; }
         public string UserInfoQueueName { get; set; }
-        public string ReplyQueueName { get; set; }
     }
 }
